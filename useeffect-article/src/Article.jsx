@@ -16,10 +16,24 @@ function Article({ title = "", children }) {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
-      setElapsedTime((preTime) => preTime + 1);
+    //useEffect s'excécute tjrs au Montage du Composant
+    console.log("ARTICLE IS MOUNTED"); //Une fois run
+    const intervalId = setInterval(() => {
+      console.log("INTERVAL"); //Plusieurs fois, malgre le unmount du composant.
+      setElapsedTime((prevTime) => prevTime + 1);
     }, 1000);
-  }, []);
+
+    return () => {
+      //S'excécute à la destruction du composant
+      console.log("ARTICLE IS DESTROYED");
+      clearInterval(intervalId);
+      //   clearTimeout(timeoutId);
+    };
+  }, []); //Tableau de dépendance
+  //
+
+  //cela s'explique par le fait que c'est un processus
+  //qui est declenché par Composant, mais qui s'excécut indépendamment de la propriété
 
   return (
     <div>
