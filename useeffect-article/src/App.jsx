@@ -4,6 +4,14 @@ import Article from "./Article";
 function App() {
   const [isArticleDisplayed, setIsArticleDisplayed] = useState(true);
   const [openArticleCount, setOpenArticleCount] = useState(0);
+  const [article, setArticle] = useState(null);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts/1")
+      .then((response) => response.json())
+      .then((data) => setArticle(data))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     //S'excécute au montage du composant
@@ -25,16 +33,9 @@ function App() {
         {isArticleDisplayed ? "Hide Article" : "Show Article"}
       </button>
       <p>You opened Article {openArticleCount}: times</p>
-      {isArticleDisplayed && (
-        <Article title={"What's new Article 😄"}>
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim,
-            tempore nisi! <br /> Possimus natus numquam provident nostrum
-            dolores, <br />
-            eius quod consectetur obcaecati dicta voluptatem earum voluptas id{" "}
-            <br />
-            assumenda voluptatibus sit nemo.
-          </p>
+      {isArticleDisplayed && article && (
+        <Article title={article.title}>
+          <p>{article.body}</p>
         </Article>
       )}
     </div>
